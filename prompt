@@ -1,0 +1,37 @@
+The service is called Sociallm and it's an api for using chatgpt 4 to generate tweets. It has the following entities:
+
+    - Calendar
+    - User
+    - Event
+    - CalendarTokens
+    - TwitterTokens
+    - Tweets
+    - Schedule
+
+Note the two "Tokens" models. These store oauth tokens from Google and Twitter.
+
+We'll need models for all of them.
+
+Calendar has:
+- id
+- user
+- url
+- tokenId
+- Schedule
+
+User has:
+- id
+- name
+- email
+- commercial (boolean)
+
+Event has:
+- start
+- end
+- name
+- description (yaml)
+- location
+
+The service tweets for every event on the calendar based on the Calendar's Schedule:
+
+Besides an Id, the Schedule object contains an object that describes the timing for tweets for events on that calendar.
