@@ -1,0 +1,233 @@
+greg@kittybuntu ~/projects [1]> gpt-engineer socialllm/service/prompts/project/
+INFO:openai:error_code=model_not_found error_message="The model 'gpt-4' does not exist" error_param=model error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+Model gpt-4 not available for provided API key. Reverting to gpt-3.5-turbo. Sign up for the GPT-4 wait list here: https://openai.com/waitlist/gpt-4-api
+
+Areas that need clarification:
+
+^C
+Aborted!
+1. What is the purpose of the "CalendarTokens" and "TwitterTokens" entities⏎                                                        greg@kittybuntu ~/projects [1]> gpt-engineer socialllm/service/prompts/project/
+INFO:openai:error_code=model_not_found error_message="The model 'gpt-4' does not exist" error_param=model error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+Model gpt-4 not available for provided API key. Reverting to gpt-3.5-turbo. Sign up for the GPT-4 wait list here: https://openai.com/waitlist/gpt-4-api
+
+Areas that need clarification:
+
+1. What is the purpose of the "CalendarTokens" and "TwitterTokens" entities?
+2. Can you provide more details about the "Schedule" object within the "Calendar" entity?
+3. How does the service determine the content of the tweets generated for each event?
+4. Is there a limit to the number of tweets that can be generated for each event?
+5. Are there any specific requirements or restrictions for the "name" and "description" fields in the "Event" entity?
+6. Can you provide an example of the timing description for tweets in the "Schedule" object?
+
+(answer in text, or "c" to move on)
+1. CalendarToken entities store the oauth token used to access google calendar to download events.
+
+CalendarTokens entities store the OAuth token used to access Google Calendar to download events. 
+
+2. Can you provide more details about the "Schedule" object within the "Calendar" entity?
+
+(answer in text, or "c" to move on)
+2. A Schedule has a foreign key link to the Calendar, and contains     information about how long before an eve   
+
+A Schedule has a foreign key link to the Calendar and contains information about how long before an event the tweets should be generated.
+
+3. How does the service determine the content of the tweets generated for each event?
+
+(answer in text, or "c" to move on)
+The description, start, and end times for the event influences the body of the tweet. For example, if the event is in two days, the tone would be less urgent than an event happening tonight.
+
+The description, start, and end times for the event influence the body of the tweet. The tone of the tweet may vary based on factors such as the time remaining until the event. 
+
+4. Is there a limit to the number of tweets that can be generated for each event?
+
+(answer in text, or "c" to move on)
+No, we do not cap how many tweets are generated. That's based on the scedule for the Calendar the Events are from. For example, the Schedule might be stored as an array of ScheduleEvents^[[D^[[D^[[D                                                    
+
+The number of tweets generated for each event is not capped and is based on the schedule for the Calendar the events are from. The schedule might be stored as an array of schedules.
+
+5. Are there any specific requirements or restrictions for the "name" and "description" fields in the "Event" entity?
+
+(answer in text, or "c" to move on)
+no
+
+Nothing more to clarify.
+
+Based on the provided information, here are the core classes and their purposes:
+
+1. Calendar: Represents a calendar entity with properties such as id, user, url, tokenId, and Schedule.
+2. User: Represents a user entity with properties such as id, name, email, and commercial.
+3. Event: Represents an event entity with properties such as start, end, name, description, and location.
+4. CalendarTokens: Represents the OAuth tokens for accessing Google Calendar.
+5. TwitterTokens: Represents the OAuth tokens for accessing Twitter.
+6. Schedule: Represents the schedule for generating tweets for events on a calendar.
+
+Now, let's roceed with creating the necessary files and their contents.
+
+1. `calendar.py`
+
+```python
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class Schedule:
+    # Define the properties of the Schedule object
+    pass
+
+@dataclass
+class Calendar:
+    id: int
+    user: User
+    url: str
+    tokenId: int
+    schedule: Schedule
+
+@dataclass
+class User:
+    id: int
+    name: str
+    email: str
+    commercial: bool
+
+@dataclass
+class Event:
+    start: str
+    end: str
+    name: str
+    description: str
+    location: str
+```
+
+2. `tokens.py`
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class CalendarTokens:
+    # Define the properties of the CalendarTokens object
+    pass
+
+@dataclass
+class TwitterTokens:
+    # Define the properties of the TwitterTokens object
+    pass
+```
+
+3. `tweets.py`
+
+```python
+from typing import List
+
+def generate_tweet(event: Event) -> str:
+    # Generate the content of the tweet based on the event details
+    pass
+
+def generate_tweets(events: List[Event]) -> List[str]:
+    # Generate tweets for a list of events
+    pass
+```
+
+Please note that the code provided above is just a skeleton and may require further implementation based on the specific requirements and logic of your application.
+
+Next, we need to create an entrypoint file that imports and utilizes these classes and functions.
+
+4. `main.py`
+
+```python
+from calendar import Calendar, User, Event
+from tokens import CalendarTokens, TwitterTokens
+from tweets import generate_tweet, generate_tweets
+
+# Example usage
+user = User(id=1, name="John Doe", email="john@example.com", commercial=False)
+calendar = Calendar(id=1, user=user, url="https://example.com/calendar", tokenId=1, schedule=None)
+event = Event(start="2022-01-01", end="2022-01-02", name="Meeting", description="Lorem ipsum", location="Office")
+tweet = generate_tweet(event)
+tweets = generate_tweets([event])
+
+print(tweet)
+print(tweets)
+```
+
+This is a basic structure to get started with the Sociallm service. You can further expand and modify the code based on your specific requirements.
+
+Finally, create the necessary dependency definition file. For Python, it would be `requirements.txt`.
+
+5. `requirements.txt`
+
+```
+dataclasses
+```
+
+Please note that the `requirements.txt` file only includes the `dataclasses` package as it is the only external dependency required based on the provided information.
+
+Ensure that all the necessary files are present and that the code is implemented correctly.
+To install the dependencies and run the codebase, follow these steps:
+
+1. Create a virtual environment (optional but recommended):
+```bash
+python3 -m venv myenv
+```
+
+2. Activate the virtual environment:
+```bash
+source myenv/bin/activate
+```
+
+3. Install the dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the code:
+```bash
+python main.py
+```
+
+Make sure you are in the correct directory where the codebase is located before running these commands.
+
+Do you want to execute this code?
+
+python3 -m venv myenv
+
+source myenv/bin/activate
+
+pip install -r requirements.txt
+
+python main.py
+
+
+If yes, press enter. Otherwise, type "no"
+
+ 
+Executing the code...
+
+Note: If it does not work as expected, consider running the code in another way than above.
+
+You can press ctrl+c *once* to stop the execution.
+
+Collecting dataclasses
+  Downloading dataclasses-0.6-py3-none-any.whl (14 kB)
+Installing collected packages: dataclasses
+Successfully installed dataclasses-0.6
+
+[notice] A new release of pip available: 22.3.1 -> 23.2.1
+[notice] To update, run: pip install --upgrade pip
+Traceback (most recent call last):
+  File "/home/greg/projects/socialllm/service/prompts/project/workspace/main.py", line 1, in <module>
+    from calendar import Calendar, User, Event
+  File "/home/greg/projects/socialllm/service/prompts/project/workspace/calendar.py", line 10, in <module>
+    class Calendar:
+  File "/home/greg/projects/socialllm/service/prompts/project/workspace/calendar.py", line 12, in Calendar
+    user: User
+          ^^^^
+NameError: name 'User' is not defined
+
+To help gpt-engineer learn, please answer 3 questions:
+
+Did the generated code run at all? y/n/u(ncertain): n
+If you have time, please explain what was not working (ok to leave blank)
+The class "User" was not defined in the calendar.py file. It needs to be imported.
+Thank you
+greg@kittybuntu ~/projectsp
